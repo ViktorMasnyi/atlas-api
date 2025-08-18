@@ -1,0 +1,95 @@
+{
+  "info": {
+    "name": "Loan Eligibility API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Submit Loan Application",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "x-api-key", "value": "{{API_KEY}}" },
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "url": {
+          "raw": "{{BASE_URL}}/loan",
+          "host": ["{{BASE_URL}}"],
+          "path": ["loan"]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"applicantName\": \"John Doe\",\n  \"creditScore\": 720,\n  \"monthlyIncome\": 6500,\n  \"requestedAmount\": 150000,\n  \"loanTermMonths\": 24\n}"
+        }
+      }
+    },
+    {
+      "name": "Get Loan by ID",
+      "request": {
+        "method": "GET",
+        "header": [
+          { "key": "x-api-key", "value": "{{API_KEY}}" }
+        ],
+        "url": {
+          "raw": "{{BASE_URL}}/loan/:id",
+          "host": ["{{BASE_URL}}"],
+          "path": ["loan", ":id"]
+        }
+      }
+    },
+    {
+      "name": "Update Rules (Admin)",
+      "request": {
+        "method": "PUT",
+        "header": [
+          { "key": "x-api-key", "value": "{{ADMIN_API_KEY}}" },
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "url": {
+          "raw": "{{BASE_URL}}/admin/rules",
+          "host": ["{{BASE_URL}}"],
+          "path": ["admin", "rules"]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"rules\": [\n    {\n      \"conditions\": {\n        \"all\": [\n          {\n            \"fact\": \"creditScore\",\n            \"operator\": \"greaterThanInclusive\",\n            \"value\": 700\n          },\n          {\n            \"fact\": \"monthlyIncomeRatio\",\n            \"operator\": \"greaterThan\",\n            \"value\": 1.5\n          }\n        ]\n      },\n      \"event\": {\n        \"type\": \"eligible\",\n        \"params\": {\n          \"eligible\": true,\n          \"reason\": \"Passed all checks\"\n        }\n      }\n    }\n  ],\n  \"version\": \"v1.1\",\n  \"description\": \"Updated minimum credit score requirements\"\n}"
+        }
+      }
+    },
+    {
+      "name": "Get Active Rules (Admin)",
+      "request": {
+        "method": "GET",
+        "header": [
+          { "key": "x-api-key", "value": "{{ADMIN_API_KEY}}" }
+        ],
+        "url": {
+          "raw": "{{BASE_URL}}/admin/rules",
+          "host": ["{{BASE_URL}}"],
+          "path": ["admin", "rules"]
+        }
+      }
+    },
+    {
+      "name": "Get Rules History (Admin)",
+      "request": {
+        "method": "GET",
+        "header": [
+          { "key": "x-api-key", "value": "{{ADMIN_API_KEY}}" }
+        ],
+        "url": {
+          "raw": "{{BASE_URL}}/admin/rules/history",
+          "host": ["{{BASE_URL}}"],
+          "path": ["admin", "rules", "history"]
+        }
+      }
+    }
+  ],
+  "variable": [
+    { "key": "BASE_URL", "value": "http://localhost:3000" },
+    { "key": "API_KEY", "value": "dev-api-key" },
+    { "key": "ADMIN_API_KEY", "value": "dev-admin-key" }
+  ]
+}
+
+
