@@ -27,7 +27,9 @@ export class CrimeAnalysisService {
   private async initializeAgent(): Promise<void> {
     if (this.agentExecutor) return;
 
-    const openAIApiKey = this.configService.get<string>('crimeAnalysis.openaiApiKey');
+    const openAIApiKey = this.configService.get<string>(
+      'crimeAnalysis.openaiApiKey',
+    );
     if (!openAIApiKey) {
       this.logger.error('OPENAI_API_KEY environment variable is not set');
       throw new Error('OPENAI_API_KEY environment variable is required');
@@ -96,8 +98,7 @@ Your task is to:
     }
     // 'https://zylalabs.com/api/4190/usa++crime+grades+by+zip+code+api/5074/get+data+by+zip';
 
-
-    const url = `http://localhost:3001?zip=${zipCode}`;
+    const url = `http://crime-mock-api:3001?zip=${zipCode}`;
 
     try {
       const response = await fetch(url, {
