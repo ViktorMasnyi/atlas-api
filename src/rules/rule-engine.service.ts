@@ -34,6 +34,7 @@ export class RuleEngineService implements OnModuleInit {
       this.activeVersion = null;
       return;
     }
+    // todo: inject AI agent response to the rules set
     const engine = new Engine(current.rules);
     this.engine = engine;
     this.activeVersion = current.version;

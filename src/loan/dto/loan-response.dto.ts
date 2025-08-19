@@ -28,6 +28,17 @@ export class LoanResponseDto {
   @ApiProperty({ example: 24 })
   loanTermMonths: number;
 
+  @ApiProperty({ example: '94109', description: 'US ZIP code' })
+  zipCode: string;
+
+  @ApiProperty({
+    example: 0.75,
+    description:
+      'Crime score from 0 to 1 (0 = lowest crime, 1 = highest crime)',
+    nullable: true,
+  })
+  crimeScore: number | null;
+
   @ApiProperty({ example: '2024-01-15T10:30:00Z' })
   evaluatedAt: Date;
 

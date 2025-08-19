@@ -1,4 +1,11 @@
-import { IsNotEmpty, IsNumber, IsString, Max, Min } from 'class-validator';
+import {
+  IsNotEmpty,
+  IsNumber,
+  IsString,
+  Max,
+  Min,
+  Matches,
+} from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 
@@ -33,4 +40,12 @@ export class CreateLoanApplicationDto {
   @Min(1, { message: 'loanTermMonths must be between 1 and 360' })
   @Max(360, { message: 'loanTermMonths must be between 1 and 360' })
   loanTermMonths: number;
+
+  @ApiProperty({ example: '94109', description: 'US ZIP code' })
+  @IsString({ message: 'zipCode must be a string' })
+  @IsNotEmpty({ message: 'zipCode should not be empty' })
+  @Matches(/^\d{5}(-\d{4})?$/, {
+    message: 'zipCode must be a valid US ZIP code format',
+  })
+  zipCode: string;
 }

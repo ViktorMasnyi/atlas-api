@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  NotFoundException,
+  Param,
+  Post,
+  UseGuards,
+} from '@nestjs/common';
 import { LoanService } from './loan.service';
 import { CreateLoanApplicationDto } from './dto/create-loan.dto';
 import { ApiKeyGuard } from '../common/guards/api-key.guard';
@@ -35,6 +43,8 @@ export class LoanController {
       monthlyIncome: loan.monthlyIncome,
       requestedAmount: loan.requestedAmount,
       loanTermMonths: loan.loanTermMonths,
+      zipCode: loan.zipCode,
+      crimeScore: loan.crimeScore,
       evaluatedAt: loan.evaluatedAt,
       ruleVersion: loan.ruleVersionUsed,
     };
@@ -49,8 +59,9 @@ export class LoanController {
   async findOne(@Param('id') id: string) {
     const loan = await this.loanService.findOne(id);
     if (!loan) {
-      return null;
+      throw new NotFoundException(`Loan application with ID ${id} not found`);
     }
+
     return {
       id: loan.id,
       applicantName: loan.applicantName,
@@ -60,6 +71,8 @@ export class LoanController {
       monthlyIncome: loan.monthlyIncome,
       requestedAmount: loan.requestedAmount,
       loanTermMonths: loan.loanTermMonths,
+      zipCode: loan.zipCode,
+      crimeScore: loan.crimeScore,
       evaluatedAt: loan.evaluatedAt,
       ruleVersion: loan.ruleVersionUsed,
     };
