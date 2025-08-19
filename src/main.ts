@@ -7,7 +7,9 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, { bufferLogs: true });
-  app.useLogger(app.get(Logger));
+  const logger = app.get(Logger);
+  app.useLogger(logger);
+  
   app.useGlobalPipes(
     new ValidationPipe({
       transform: true,
@@ -16,9 +18,21 @@ async function bootstrap() {
       validationError: { target: false },
       exceptionFactory: (errors) => {
         const messages = errors
-          .map((e) => Object.values(e.constraints || {}))
-          .reduce((a, b) => a.concat(b), [] as string[])
-          .join(', ');
+          .map((e) => {
+            const constraints = Object.values(e.constraints || {});
+            return `${e.property}: ${constraints.join(', ')}`;
+          })
+          .join('; ');
+        
+        logger.warn('Validation failed', {
+          errors: errors.map(e => ({
+            property: e.property,
+            value: e.value,
+            constraints: e.constraints,
+          })),
+          message: messages,
+        });
+        
         return new BadRequestException({
           errorCode: 'VALIDATION_ERROR',
           errorMessage: messages,

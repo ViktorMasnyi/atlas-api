@@ -25,6 +25,39 @@ import { AdminModule } from './admin/admin.module';
           process.env.NODE_ENV !== 'production'
             ? { target: 'pino-pretty' }
             : undefined,
+        serializers: {
+          err: (err) => ({
+            type: err.type,
+            message: err.message,
+            stack: err.stack,
+            ...err,
+          }),
+          req: (req) => ({
+            method: req.method,
+            url: req.url,
+            headers: req.headers,
+            body: req.body,
+          }),
+          res: (res) => ({
+            statusCode: res.statusCode,
+            headers: res._headers || {},
+          }),
+        },
+        customLogLevel: (req, res, err) => {
+          if (res.statusCode >= 400 && res.statusCode < 500) {
+            return 'warn';
+          }
+          if (res.statusCode >= 500 || err) {
+            return 'error';
+          }
+          return 'info';
+        },
+        customSuccessMessage: (req, res) => {
+          return `${req.method} ${req.url} ${res.statusCode}`;
+        },
+        customErrorMessage: (req, res, err) => {
+          return `${req.method} ${req.url} ${res.statusCode} - ${err?.message || 'Unknown error'}`;
+        },
       },
     }),
     TypeOrmModule.forRootAsync({
