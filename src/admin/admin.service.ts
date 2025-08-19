@@ -62,7 +62,7 @@ export class AdminService {
       }),
     );
 
-    await this.ruleEngine.loadActiveRules();
+    await this.ruleEngine.refreshRules();
 
     return { version: newRule.version, isActive: newRule.isActive };
   }
