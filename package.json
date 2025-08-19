@@ -17,7 +17,6 @@
     "test": "vitest",
     "test:unit": "vitest",
     "test:unit:ci": "vitest --run --coverage.enabled true --coverage.reporter=lcov",
-    "test:e2e": "jest --config ./test/jest-e2e.json",
     "typeorm:generate": "typeorm-ts-node-esm migration:generate -d src/database/data-source.ts src/migrations/auto-migration",
     "typeorm:run": "node -r ts-node/register -r tsconfig-paths/register scripts/run-migrations.ts",
     "typeorm:revert": "typeorm-ts-node-esm migration:revert -d src/database/data-source.ts"

@@ -1,0 +1,161 @@
+{
+  "info": {
+    "_postman_id": "592b9a03-4f63-4a66-9d04-a940185ab5eb",
+    "name": "Loan Eligibility API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "5735330"
+  },
+  "item": [
+    {
+      "name": "Submit Loan Application",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "x-api-key",
+            "value": "{{API_KEY}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"applicantName\": \"John Doe5\",\n  \"creditScore\": 720,\n  \"monthlyIncome\": 6500,\n  \"requestedAmount\": 100000,\n  \"loanTermMonths\": 24,\n  \"zipCode\": \"94109\"\n}"
+        },
+        "url": {
+          "raw": "{{BASE_URL}}/loan",
+          "host": [
+            "{{BASE_URL}}"
+          ],
+          "path": [
+            "loan"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get Loan by ID",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "x-api-key",
+            "value": "{{API_KEY}}"
+          }
+        ],
+        "url": {
+          "raw": "{{BASE_URL}}/loan/:id",
+          "host": [
+            "{{BASE_URL}}"
+          ],
+          "path": [
+            "loan",
+            ":id"
+          ],
+          "variable": [
+            {
+              "key": "id",
+              "value": ""
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Update Rules (Admin)",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "x-api-key",
+            "value": "{{ADMIN_API_KEY}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"rules\": [\n    {\n      \"conditions\": {\n        \"all\": [\n          {\n            \"fact\": \"creditScore\",\n            \"operator\": \"greaterThanInclusive\",\n            \"value\": 700\n          },\n          {\n            \"fact\": \"monthlyIncomeRatio\",\n            \"operator\": \"greaterThan\",\n            \"value\": 1.5\n          },\n          {\n            \"fact\": \"crimeRate\",\n            \"operator\": \"lessThan\",\n            \"value\": 0.8\n          }\n        ]\n      },\n      \"event\": {\n        \"type\": \"eligible\",\n        \"params\": {\n          \"eligible\": true,\n          \"reason\": \"Passed all checks including crime rate assessment\"\n        }\n      }\n    },\n    {\n      \"conditions\": {\n        \"all\": [\n          {\n            \"fact\": \"creditScore\",\n            \"operator\": \"greaterThanInclusive\",\n            \"value\": 700\n          },\n          {\n            \"fact\": \"monthlyIncomeRatio\",\n            \"operator\": \"greaterThan\",\n            \"value\": 1.5\n          },\n          {\n            \"fact\": \"crimeRate\",\n            \"operator\": \"greaterThanInclusive\",\n            \"value\": 0.8\n          }\n        ]\n      },\n      \"event\": {\n        \"type\": \"eligible\",\n        \"params\": {\n          \"eligible\": false,\n          \"reason\": \"High crime rate area - loan declined for safety reasons\"\n        }\n      }\n    },\n    {\n      \"conditions\": {\n        \"any\": [\n          {\n            \"fact\": \"creditScore\",\n            \"operator\": \"lessThan\",\n            \"value\": 700\n          },\n          {\n            \"fact\": \"monthlyIncomeRatio\",\n            \"operator\": \"lessThanInclusive\",\n            \"value\": 1.5\n          }\n        ]\n      },\n      \"event\": {\n        \"type\": \"eligible\",\n        \"params\": {\n          \"eligible\": false,\n          \"reason\": \"Insufficient credit score or income ratio\"\n        }\n      }\n    }\n  ],\n  \"version\": \"v1.1\",\n  \"description\": \"Updated rules with crime rate assessment - includes automatic decline for high crime areas (>=0.8) and approval for low crime areas (<0.8) with good credit and income\"\n}\n"
+        },
+        "url": {
+          "raw": "{{BASE_URL}}/admin/rules",
+          "host": [
+            "{{BASE_URL}}"
+          ],
+          "path": [
+            "admin",
+            "rules"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get Active Rules (Admin)",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "x-api-key",
+            "value": "{{ADMIN_API_KEY}}"
+          }
+        ],
+        "url": {
+          "raw": "{{BASE_URL}}/admin/rules",
+          "host": [
+            "{{BASE_URL}}"
+          ],
+          "path": [
+            "admin",
+            "rules"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get Rules History (Admin)",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "x-api-key",
+            "value": "{{ADMIN_API_KEY}}"
+          }
+        ],
+        "url": {
+          "raw": "{{BASE_URL}}/admin/rules/history",
+          "host": [
+            "{{BASE_URL}}"
+          ],
+          "path": [
+            "admin",
+            "rules",
+            "history"
+          ]
+        }
+      },
+      "response": []
+    }
+  ],
+  "variable": [
+    {
+      "key": "BASE_URL",
+      "value": "http://localhost:3000"
+    },
+    {
+      "key": "API_KEY",
+      "value": "dev-api-key"
+    },
+    {
+      "key": "ADMIN_API_KEY",
+      "value": "dev-admin-key"
+    }
+  ]
+}
