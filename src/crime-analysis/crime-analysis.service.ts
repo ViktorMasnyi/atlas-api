@@ -34,7 +34,7 @@ export class CrimeAnalysisService {
     }
 
     const model = new ChatOpenAI({
-      modelName: 'gpt-3.5-turbo',
+      model: 'gpt-3.5-turbo',
       temperature: 0,
       openAIApiKey,
     });
@@ -146,11 +146,11 @@ Your task is to:
       const crimeScore = this.parseCrimeScore(crimeScoreText);
 
       // Fetch raw data for storage
-      // const rawData = await this.fetchCrimeDataFromAPI(zipCode);
-      // const parsedRawData = JSON.parse(rawData);
+      const rawData = await this.fetchCrimeDataFromAPI(zipCode);
+      const parsedRawData = JSON.parse(rawData);
 
       // Store the result in database
-      // await this.storeCrimeData(zipCode, crimeScore, parsedRawData);
+      await this.storeCrimeData(zipCode, crimeScore, parsedRawData);
 
       this.logger.log(
         `Crime analysis completed for ZIP ${zipCode}: score = ${crimeScore}`,
@@ -158,8 +158,8 @@ Your task is to:
 
       return {
         crimeScore,
-        // rawData: parsedRawData,
-        rawData: [],
+        rawData: parsedRawData,
+        // rawData: [],
       };
     } catch (error) {
       this.logger.error(`Crime analysis failed for ZIP ${zipCode}:`, error);
@@ -171,10 +171,7 @@ Your task is to:
 
   private parseCrimeScore(response: string): number {
     // Extract number from response, handle various formats
-
-
-    // todo: delete logging
-    console.log('====api response: ', response);
+    this.logger.log(`Parsing crime score from response: ${response}`);
     const match = response.match(/([01](?:\.\d+)?)/);
     if (!match) {
       throw new Error('Could not parse crime score from agent response');

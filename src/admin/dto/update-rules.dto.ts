@@ -27,6 +27,7 @@ class RuleEvent {
 
   @ApiProperty({ type: () => RuleEventParams })
   @Type(() => RuleEventParams)
+  @ValidateNested()
   params: RuleEventParams;
 }
 
@@ -42,18 +43,21 @@ class Condition {
   operator: string;
 
   @ApiProperty({ example: 700 })
+  @IsNotEmpty()
   value: any;
 }
 
 class RuleConditions {
   @ApiProperty({ type: () => [Condition], required: false })
   @IsOptional()
+  @IsArray()
   @ValidateNested({ each: true })
   @Type(() => Condition)
   all?: Condition[];
 
   @ApiProperty({ type: () => [Condition], required: false })
   @IsOptional()
+  @IsArray()
   @ValidateNested({ each: true })
   @Type(() => Condition)
   any?: Condition[];
@@ -62,10 +66,12 @@ class RuleConditions {
 class Rule {
   @ApiProperty({ type: () => RuleConditions })
   @Type(() => RuleConditions)
+  @ValidateNested()
   conditions: RuleConditions;
 
   @ApiProperty({ type: () => RuleEvent })
   @Type(() => RuleEvent)
+  @ValidateNested()
   event: RuleEvent;
 }
 

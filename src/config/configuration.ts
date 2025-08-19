@@ -6,7 +6,7 @@ export default () => ({
   crimeAnalysis: {
     zylaApiKey: process.env.ZYLA_API_KEY,
     openaiApiKey: process.env.OPENAI_API_KEY,
-    crimeRateWeight: parseFloat(process.env.CRIME_RATE_WEIGHT ?? '0.2'),
+    crimeRateWeight: parseFloat(process.env.CRIME_RATE_WEIGHT ?? '0.3'),
   },
   database: {
     host: process.env.DB_HOST ?? 'localhost',

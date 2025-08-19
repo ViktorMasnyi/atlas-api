@@ -34,9 +34,8 @@ export class RuleEngineService implements OnModuleInit {
       this.activeVersion = null;
       return;
     }
-    // todo: inject AI agent response to the rules set
-    const engine = new Engine(current.rules);
-    this.engine = engine;
+
+    this.engine = new Engine(current.rules);
     this.activeVersion = current.version;
     this.logger.log(`Loaded rule version ${current.version}`);
   }
@@ -68,6 +67,9 @@ export class RuleEngineService implements OnModuleInit {
     monthlyIncome: number;
     requestedAmount: number;
     loanTermMonths: number;
+    crimeRate: number;
+    crimeRateThreshold: number;
+    crimeRateWeight: number;
   }): Promise<RuleEvaluationResult> {
     if (!this.engine) {
       await this.loadActiveRules();
@@ -87,6 +89,7 @@ export class RuleEngineService implements OnModuleInit {
       requestedAmount: app.requestedAmount,
       loanTermMonths: app.loanTermMonths,
       monthlyIncomeRatio,
+      crimeRate: app.crimeRate,
     };
 
     let eligible = false;
