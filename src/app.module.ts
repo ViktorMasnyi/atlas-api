@@ -7,6 +7,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { LoanApplication } from './entities/loan-application.entity';
 import { BusinessRule } from './entities/business-rule.entity';
 import { RuleHistory } from './entities/rule-history.entity';
+import { CrimeData } from './entities/crime-data.entity';
 import { RuleEngineService } from './rules/rule-engine.service';
 import { AdminApiKeyGuard, ApiKeyGuard } from './common/guards/api-key.guard';
 import { LoggerModule } from 'nestjs-pino';
@@ -43,7 +44,12 @@ import { AdminModule } from './admin/admin.module';
         synchronize: false,
       }),
     }),
-    TypeOrmModule.forFeature([LoanApplication, BusinessRule, RuleHistory]),
+    TypeOrmModule.forFeature([
+      LoanApplication,
+      BusinessRule,
+      RuleHistory,
+      CrimeData,
+    ]),
     LoanModule,
     AdminModule,
   ],

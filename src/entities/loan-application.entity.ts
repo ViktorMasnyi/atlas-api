@@ -26,6 +26,18 @@ export class LoanApplication {
   @Column({ name: 'loan_term_months', type: 'int' })
   loanTermMonths: number;
 
+  @Column({ name: 'zip_code', type: 'varchar', length: 10 })
+  zipCode: string;
+
+  @Column({
+    name: 'crime_score',
+    type: 'decimal',
+    precision: 3,
+    scale: 2,
+    nullable: true,
+  })
+  crimeScore: number | null;
+
   @Column({ type: 'boolean' })
   eligible: boolean;
 
