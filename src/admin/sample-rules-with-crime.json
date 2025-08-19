@@ -1,0 +1,85 @@
+{
+  "rules": [
+    {
+      "conditions": {
+        "all": [
+          {
+            "fact": "creditScore",
+            "operator": "greaterThanInclusive",
+            "value": 700
+          },
+          {
+            "fact": "monthlyIncomeRatio",
+            "operator": "greaterThan",
+            "value": 1.5
+          },
+          {
+            "fact": "crimeRate",
+            "operator": "lessThan",
+            "value": 0.8
+          }
+        ]
+      },
+      "event": {
+        "type": "eligible",
+        "params": {
+          "eligible": true,
+          "reason": "Passed all checks including crime rate assessment"
+        }
+      }
+    },
+    {
+      "conditions": {
+        "all": [
+          {
+            "fact": "creditScore",
+            "operator": "greaterThanInclusive",
+            "value": 700
+          },
+          {
+            "fact": "monthlyIncomeRatio",
+            "operator": "greaterThan",
+            "value": 1.5
+          },
+          {
+            "fact": "crimeRate",
+            "operator": "greaterThanInclusive",
+            "value": 0.8
+          }
+        ]
+      },
+      "event": {
+        "type": "eligible",
+        "params": {
+          "eligible": false,
+          "reason": "High crime rate area - loan declined for safety reasons"
+        }
+      }
+    },
+    {
+      "conditions": {
+        "any": [
+          {
+            "fact": "creditScore",
+            "operator": "lessThan",
+            "value": 700
+          },
+          {
+            "fact": "monthlyIncomeRatio",
+            "operator": "lessThanInclusive",
+            "value": 1.5
+          }
+        ]
+      },
+      "event": {
+        "type": "eligible",
+        "params": {
+          "eligible": false,
+          "reason": "Insufficient credit score or income ratio"
+        }
+      }
+    }
+  ],
+  "version": "v1.2",
+  "description": "Updated rules with crime rate assessment - includes automatic decline for high crime areas (>=0.8) and approval for low crime areas (<0.8) with good credit and income"
+}
