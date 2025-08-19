@@ -44,6 +44,21 @@ export class RuleEngineService implements OnModuleInit {
     return this.activeVersion;
   }
 
+  async refreshRules(): Promise<void> {
+    await this.loadActiveRules();
+  }
+
+  async checkAndRefreshRules(): Promise<void> {
+    const current = await this.businessRuleRepository.findOne({
+      where: { isActive: true },
+    });
+
+    // If no active rules in DB or version changed, refresh
+    if (!current || current.version !== this.activeVersion) {
+      await this.loadActiveRules();
+    }
+  }
+
   validateRulesStructure(rules: any[]): void {
     if (!Array.isArray(rules) || rules.length === 0) {
       throw new Error('Rules must be a non-empty array');
@@ -71,9 +86,9 @@ export class RuleEngineService implements OnModuleInit {
     crimeRateThreshold: number;
     crimeRateWeight: number;
   }): Promise<RuleEvaluationResult> {
-    if (!this.engine) {
-      await this.loadActiveRules();
-    }
+    // Check and refresh rules if needed before evaluation
+    await this.checkAndRefreshRules();
+
     if (!this.engine || !this.activeVersion) {
       throw new Error('No active rule set loaded');
     }
