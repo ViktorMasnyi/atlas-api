@@ -43,29 +43,28 @@ $ pnpm run start
 $ pnpm run start:dev
 
 # production mode
-$ pnpm run start:prod
+$ pnpm run start
 ```
 
 ## Test
 
-```bash
 # unit tests
+```bash
 $ pnpm run test:unit
-
-# e2e tests
-$ pnpm run test:e2e
-
+```
 # CI run with coverage
+```bash
 $ pnpm run test:unit:ci
-
+```
 ## Environment
 
 Set the following variables (example values):
 
-```
+```bash
+OPENAI_API_KEY=your-openai-api-key
+ZYLA_API_KEY=your-zylalabs-api-key
 API_KEY=dev-api-key
 ADMIN_API_KEY=dev-admin-key
-ADMIN_API_KEY_LABEL=admin
 DB_HOST=localhost
 DB_PORT=5432
 DB_NAME=atlas
@@ -74,26 +73,62 @@ DB_PASSWORD=postgres
 DB_SSL=false
 ```
 
+## API Endpoints
+see the postman collection in `docs/atlas.postman_collection.json`
+
 ## Swagger
 
 Available at `/docs` when the app is running.
 
 ## Docker Compose
 
+```bash
+docker-compose up --build
 ```
-docker compose -f src/docker-compose.yml up --build
-```
-```
+# Application architecture
 
-## Support
+```
+Loan Application → Crime Analysis Service → LangChain Agent → Zyla Labs API (mocked as stand alone service)
+                                      ↓
+                              Rule Engine → Loan Decision
+```
+The crime analysis is performed before rule evaluation, and the crime score is included as a fact in the rule engine evaluation.
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+## Crime Analysis Module
+
+This module integrates crime rate analysis into the loan application process using LangChain AI agents.
+
+## Overview
+
+The crime analysis module:
+- Fetches crime data for a given ZIP code from the Zyla Labs API
+- Uses a LangChain AI agent to analyze the crime data and determine a crime score (0-1)
+- Integrates the crime score into the loan evaluation process
+- Stores crime data for future reference
+
+## Features
+
+### Crime Score Calculation
+- **0.0**: Lowest crime rate (very safe area)
+- **1.0**: Highest crime rate (very dangerous area)
+- The AI agent analyzes multiple factors including:
+    - Overall crime grade (A-F scale)
+    - Violent crime rates
+    - Property crime rates
+    - Crime frequency and statistics
+    - Risk percentages
+
+### Loan Evaluation Integration
+- Crime rate threshold: 0.8 (configurable)
+- If crime rate >= 0.8: Automatic loan decline
+- If crime rate < 0.8: Crime score contributes to aggregate risk assessment
+- Crime rate weight: 0.2 (configurable via `CRIME_RATE_WEIGHT` environment variable)
+
+
 
 ## Stay in touch
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+- Author - [Viktor Masnyi](https://github.com/ViktorMasnyi)
 
 ## License
 
