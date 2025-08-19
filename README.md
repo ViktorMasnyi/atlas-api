@@ -76,6 +76,15 @@ DB_SSL=false
 ## API Endpoints
 see the postman collection in `docs/atlas.postman_collection.json`
 
+the Postman collection contains the put request with extended validation rules for the loan application.
+App can perform basic evaluation with the default rules, but the extended rules can be used to add AI agent crime analysis score to the evaluation.
+the crime acore API mock service is providing the hardcoded response for the crime analysis (one response is for high risc other is for low risc), so you can test the extended rules bu running the request 
+```aiignore
+POST /loan
+```
+multiple times with the same payload, and you will see the different results based on the crime score.
+
+
 ## Swagger
 
 Available at `/docs` when the app is running.
