@@ -72,6 +72,8 @@ DB_USER=postgres
 DB_PASSWORD=postgres
 DB_SSL=false
 ```
+Note!
+ZYLA_API_KEY can be any non empty string
 
 ## API Endpoints
 see the postman collection in `docs/atlas.postman_collection.json`
