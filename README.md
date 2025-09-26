@@ -24,7 +24,7 @@
 
 ## Description
 
-Loan Eligibility API built with NestJS, TypeORM, PostgreSQL, json-rules-engine, API key auth, Pino logging, Docker Compose, and Vitest.
+Loan Eligibility API built with Langchain AI Agent, NestJS, TypeORM, PostgreSQL, json-rules-engine, API key auth, Pino logging, Docker Compose, and Vitest.
 
 ## Installation
 
